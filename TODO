@@ -1,0 +1,11 @@
+Taski: 
+Seba - Baza danych taski (ORM + wypelnianie danych Faker): (MySQL)
+1. Adres, użytkownik, klient, płatność, platnoscKlient, MetodaPlatnosci
+2. Egzemplarz, Ksiazka, Autorstwo, Autor
+3. Pracownik, stanowisko, zwrot, wypożyczenie, zwracanyEgzemplarz, ZamowionyEgzemplarz
+
+Każdy indywidualnie - PU i testy jednostkowe (pyTest) do nich
+
+Adam - Selenium
+
+Jan - Diagramy klas i sekwencji
