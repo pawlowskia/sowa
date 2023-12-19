@@ -1,1 +1,2 @@
-# sowa
+# Biblioteka SOWA
+Projekt PO
