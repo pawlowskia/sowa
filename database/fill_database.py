@@ -3,7 +3,7 @@ from sqlalchemy.orm import sessionmaker, declarative_base
 from faker import Faker
 import random
 
-from sowa.create_database import Adres, Pracownik, Stanowisko, Uzytkownik, Klient, Autor, Zwrot, Ksiazka, Egzemplarz, \
+from sowa.database.create_database import Adres, Pracownik, Stanowisko, Uzytkownik, Klient, Autor, Zwrot, Ksiazka, Egzemplarz, \
     Wypozyczenie, MetodaPlatnosci, Platnosc, Autorstwo, ZwracanyEgzemplarz, ZamowionyEgzemplarz, PlatnoscKlient
 
 Base = declarative_base()
@@ -53,18 +53,18 @@ def generate_random_uzytkownik(g_adresy):
     }
 
 
-def generate_random_pracownik(g_stanowiska, uzytkownik):
+def generate_random_pracownik(g_stanowiska, g_uzytkownik):
     return {
         'DataZatr': fake.date_this_decade(),
         'StanowiskoId': random.choice(g_stanowiska).Id,
-        'UzytkownikId': uzytkownik.Id
+        'UzytkownikId': g_uzytkownik.Id
     }
 
 
-def generate_random_platnosc_klient(g_klienci, platnosc):
+def generate_random_platnosc_klient(g_klienci, g_platnosc):
     return {
         'KlientId': random.choice(g_klienci).Id,
-        'PlatnoscId': platnosc.Id
+        'PlatnoscId': g_platnosc.Id
     }
 
 
