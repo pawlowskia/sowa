@@ -7,7 +7,7 @@ $ docker pull mysql:latest
 ```
 Obraz dockerowy bazy danych tworzymy za pomocą komendy:
 ```
-$ docker run -p 13306:3306 --name sowa -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DATABASE_NAME=sowa -d mysql:latest
+$ docker run -p 13306:3306 --name sowa -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DATABASE=sowa -d mysql:latest
 ```
 Następnie przy uruchomieniu skryptu mogą wystąpić różnorakie błędy, np. 
 ```
