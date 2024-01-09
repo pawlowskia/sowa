@@ -3,7 +3,7 @@ from sqlalchemy.orm import sessionmaker, declarative_base
 from faker import Faker
 import random
 
-from sowa.database.create_database import Adres, Pracownik, Stanowisko, Uzytkownik, Klient, Autor, Zwrot, Ksiazka, Egzemplarz, \
+from create_database import Adres, Pracownik, Stanowisko, Uzytkownik, Klient, Autor, Zwrot, Ksiazka, Egzemplarz, \
     Wypozyczenie, MetodaPlatnosci, Platnosc, Autorstwo, ZwracanyEgzemplarz, ZamowionyEgzemplarz, PlatnoscKlient
 
 Base = declarative_base()
