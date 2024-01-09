@@ -9,7 +9,7 @@ from create_database import Adres, Pracownik, Stanowisko, Uzytkownik, Klient, Au
 Base = declarative_base()
 fake = Faker()
 
-engine = create_engine('mysql+pymysql://root:password@localhost:13306/mysql', echo=True)
+engine = create_engine('mysql+pymysql://root:password@localhost:13306/sowa', echo=True)
 Base.metadata.create_all(engine)
 
 Session = sessionmaker(bind=engine)

@@ -1,7 +1,7 @@
 from sqlalchemy import create_engine, Column, Integer, String, Boolean, Date, Enum, ForeignKey
 from sqlalchemy.orm import relationship, declarative_base
 
-url = 'mysql+pymysql://root:password@localhost:13306/mysql'
+url = 'mysql+pymysql://root:password@localhost:13306/sowa'
 engine = create_engine(url, echo=True)
 connection = engine.connect()
 
