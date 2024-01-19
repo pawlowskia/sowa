@@ -56,10 +56,13 @@ def main():
         st.markdown(
             """
             <style>
+                .st-emotion-cache-es6upy {
+                    background-color: #80A4BB
+                    
+                }
+                
                 div.stButton {
                     text-align: center;
-                    color: #80A4ED
-                    
                 }
             </style>
             """
