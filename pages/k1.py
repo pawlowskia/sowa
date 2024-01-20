@@ -157,7 +157,7 @@ with col2:
 st.components.v1.html("""
     <script>
     const matches = parent.document.querySelectorAll("[data-testid='stVerticalBlock']");
-    const match = matches[1];
+    const match = matches[2];
     match.style.background = "#D6CCC2";
     match.style.textAlign = 'center';
     match.style.borderRadius = '10px';
