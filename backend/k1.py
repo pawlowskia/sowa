@@ -13,8 +13,9 @@ session = Session()
 
 # Function to fetch all books from the database
 def get_all_books():
-    return session.query(Ksiazka).all()
-
+    # return session.query(Ksiazka).all()
+    # only return books that have at least one copy with status 'Dostepny'
+    return session.query(Ksiazka).join(Egzemplarz).filter(Egzemplarz.Status == 'Dostepny').all()
 
 # Fetch all books
 books = get_all_books()
