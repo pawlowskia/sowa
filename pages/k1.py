@@ -15,7 +15,7 @@ session = Session()
 if 'page' not in st.session_state:
     st.session_state.page = 0
 if 'is_worker' not in st.session_state:
-    st.session_state.is_worker = True
+    st.session_state.is_worker = False
 
 
 def get_books(statuses, author, title, year, publisher):
@@ -44,7 +44,7 @@ if st.session_state.is_worker:
 else:
     navbar = option_menu(None, ["Home", "Account", "Search", "Wallet", "Books", "Notifications"],
                               icons=['house', 'person-circle', "search", "wallet", "book", "bell"],
-                              menu_icon="cast", default_index=0, orientation="horizontal", key='menu_5')
+                              menu_icon="cast", default_index=4, orientation="horizontal", key='menu_5')
 
 col1, col2 = st.columns([2, 5])
 with col1:

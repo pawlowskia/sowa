@@ -67,6 +67,12 @@ def generate_random_platnosc_klient(g_klienci, g_platnosc):
         'PlatnoscId': g_platnosc.Id
     }
 
+def generate_random_powiadomienie(g_klient):
+    return {
+        'KlientId': g_klient.Id,
+        'Tresc': fake.text(max_nb_chars=200),
+        'Status': random.choice([True, False])
+    }
 
 def generate_random_wypozyczenie(g_klienci, g_pracownicy):
     return {
@@ -150,6 +156,7 @@ for _ in range(5000):
     adresy.append(Adres(**generate_random_adres()))
 session.add_all(adresy)
 session.commit()
+
 
 pracownicy = []
 for _ in range(50):
@@ -238,6 +245,12 @@ for zwrocony_egzemplarz in zwrocone_egzemplarze_set:
                                                    EgzemplarzId=zwrocony_egzemplarz[0],
                                                    Komentarz=generate_random_komentarz()))
 session.add_all(zwrocone_egzemplarze)
+
+powiadomienia = []
+for _ in range(1000):
+    powiadomienia.append(generate_random_powiadomienie(random.choice(klienci)))
+
+session.add_all(powiadomienia)
 
 session.commit()
 
