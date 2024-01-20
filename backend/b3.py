@@ -1,6 +1,6 @@
 import streamlit as st
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, joinedload
+from sqlalchemy.orm import sessionmaker
 from database.create_database import Klient, Uzytkownik, Autorstwo, Egzemplarz
 from streamlit_option_menu import option_menu
 
@@ -49,10 +49,6 @@ with col1:
         st.write(f'{user.DataUr}')
         st.write("")
 
-with col2:
-    pass
-
-
 st.components.v1.html("""
     <script>
     const matches = parent.document.querySelectorAll("[data-testid='stVerticalBlock']");
@@ -62,3 +58,8 @@ st.components.v1.html("""
     match.style.borderRadius = '10px';
     </script>
     """, height=0, width=0)
+
+with col2:
+    pass
+
+
