@@ -20,12 +20,29 @@ def get_all_books():
 def get_all_copies(book_id):
     # return session.query(Ksiazka).all()
     # only return books that have at least one copy with status 'Dostepny'
-    return session.query(Egzemplarz).join(Ksiazka).filter(Egzemplarz.KsiazkaId == book_id, Egzemplarz.Status != "Niedostepny").all()
+    return session.query(Egzemplarz).join(Ksiazka).filter(Egzemplarz.KsiazkaId == book_id,
+                                                          Egzemplarz.Status != "Niedostepny").all()
 
 
 def delete_copy(copy_id):
     copy_to_delete = session.query(Egzemplarz).filter(Egzemplarz.Id == copy_id).first()
     copy_to_delete.Status = 'Niedostepny'
+    session.commit()
+
+
+def edit_book(book_id, title, isbn, authors, publisher, year):
+    book_to_update = session.query(Ksiazka).filter(Ksiazka.Id == book_id).first()
+    book_to_update.Tytul = title
+    if len(isbn) < 14:
+        book_to_update.ISBN = isbn
+    book_to_update.Wydawnictwo = publisher
+    book_to_update.RokWydania = year
+    book_authors = session.query(Autorstwo).filter(Autorstwo.KsiazkaId == book_id).all()
+    for book_author in book_authors:
+        session.delete(book_author)
+    for author in authors:
+        new_book_author = Autorstwo(AutorId=author.Id, KsiazkaId=book_id)
+        session.add(new_book_author)
     session.commit()
 
 
@@ -153,9 +170,9 @@ def main():
             with modal_edit.container():
                 col1, col2, col3 = st.columns([1, 8, 1])
                 with col2:
-                    isbn_input = st.text_input("ISBN:", value=book.ISBN)
                     name_input = st.text_input("Title:", value=book.Tytul)
-                    author_input = st.multiselect("Author:", options=all_authors)
+                    isbn_input = st.text_input("ISBN:", value=book.ISBN)
+                    author_input = st.multiselect("Author:", options=all_authors, default=authors)
                     publisher_input = st.text_input("Publisher:", value=book.Wydawnictwo)
                     year_input = st.text_input("Year:", value=book.RokWydania)
 
@@ -175,9 +192,14 @@ def main():
                     if confirm_edit_modal.is_open():
                         with confirm_edit_modal.container():
                             st.write("Are you sure?")
-                            col111, col112 = st.columns([1, 5])
+                            col111, col112 = st.columns([1, 4])
                             with col111:
                                 yes = st.button("Yes")
+                                if yes:
+                                    edit_book(book.Id, name_input, isbn_input, author_input, publisher_input,
+                                              year_input)
+                                    confirm_edit_modal.close()
+
     st.write("---")  # Separator between books
 
     prev_page_col, separator, next_page_col = st.columns([1, 4, 1])
