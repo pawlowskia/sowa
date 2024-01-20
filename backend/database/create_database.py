@@ -57,6 +57,9 @@ class Autor(Base):
     Imie = Column(String(255), nullable=False)
     Nazwisko = Column(String(255), nullable=False)
 
+    def __str__(self):
+        return f"{self.Imie} {self.Nazwisko}"
+
 
 class Zwrot(Base):
     __tablename__ = 'Zwrot'

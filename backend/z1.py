@@ -12,7 +12,7 @@ engine = create_engine(url, echo=True)
 Session = sessionmaker(bind=engine)
 session = Session()
 
-# Function to fetch all books from the database
+
 def get_all_books():
     return session.query(Ksiazka).all()
 
@@ -39,7 +39,7 @@ def main():
         # Use Markdown to create a colored rectangle
         st.markdown(
             f"""
-                    <div style="background-color: #80A4ED; padding: 10px; border-radius: 10px;">
+                    <div style="background-color: #D5BDAF; padding: 10px; border-radius: 10px;">
                         <table>
                             <tr>
                                 <td>
@@ -61,11 +61,6 @@ def main():
         st.markdown(
             """
             <style>
-                .st-emotion-cache-es6upy {
-                    background-color: #80A4BB
-
-                }
-
                 div.stButton {
                     text-align: center;
                 }
@@ -146,7 +141,7 @@ def main():
                 with col2:
                     isbn_input = st.text_input("ISBN:", value=book.ISBN)
                     name_input = st.text_input("Title:", value=book.Tytul)
-                    author_input = st.multiselect("Author:",options=all_authors)
+                    author_input = st.multiselect("Author:", options=all_authors)
                     publisher_input = st.text_input("Publisher:", value=book.Wydawnictwo)
                     year_input = st.text_input("Year:", value= book.RokWydania)
 
