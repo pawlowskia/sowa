@@ -25,7 +25,7 @@ def get_all_copies(book_id):
 
 def delete_copy(copy_id):
     copy_to_delete = session.query(Egzemplarz).filter(Egzemplarz.Id == copy_id).first()
-    copy_to_delete.Status = "Niedostepny"
+    copy_to_delete.Status = 'Niedostepny'
     session.commit()
 
 
@@ -124,14 +124,15 @@ def main():
             with confirm_delete_modal.container():
                 colum = st.columns([1, 8, 1])
                 with colum[1]:
-                    st.write("")
-                    st.write(f'Choose copies of "{book.Tytul}" to delete')
+                    st.write(f"Choose copies of")
+                    st.write(f'"{book.Tytul}" to delete')
                     copies = get_all_copies(book.Id)
                     copies_to_delete = st.multiselect("", options=copies)
                     confirm_delete_button = st.button("Confirm")
                 if confirm_delete_button:
                     for copy in copies_to_delete:
                         delete_copy(copy.Id)
+                    st.warning(f'{len(copies_to_delete)} copies status changed to inaccessible')
 
         if modal_preview.is_open():
             with modal_preview.container():
