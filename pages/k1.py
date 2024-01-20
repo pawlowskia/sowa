@@ -3,8 +3,8 @@ from streamlit_option_menu import option_menu
 from st_keyup import st_keyup
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
-from streamlit_modal import Modal
 from backend.database.create_database import Ksiazka, Autor, Autorstwo, Egzemplarz, Klient, Uzytkownik, PlatnoscKlient, Platnosc
+from streamlit_modal import Modal
 
 st.set_page_config(layout="wide")
 
@@ -34,37 +34,17 @@ books_per_page = 3
 if 'books' not in st.session_state:
     st.session_state.books = get_books(["Dostepny"], '', '', '', '')
 
-
-def on_change(key):
-    selection = st.session_state[key]
-    # st.write(f"Selection changed to {selection}")
-    if selection == "Notifications":
-        modal = Modal(
-            f"Notifications",
-            key=f'modal-notif',
-            padding=10,
-            max_width=500
-        )
-        modal.open()
-
-        if modal.is_open():
-            with (modal.container()):
-                notifications = session.query(Klient).join(PlatnoscKlient).join(Platnosc).filter(Platnosc.StatusPlatnosci == False).all()
-                for notification in notifications:
-                    st.write(f"Client {notification.Uzytkownik.Imie} {notification.Uzytkownik.Nazwisko} has to pay for the book {notification.Egzemplarz.Ksiazka.Tytul}")
-
-
 navbar = None
 
 
 if st.session_state.is_worker:
     navbar = option_menu(None, ["Home", "Account", "Search", "Reports", "Books", "Notifications"],
                                 icons=['house', 'person-circle', "search", "file-earmark-bar-graph", "book", "bell"],
-                                menu_icon="cast", default_index=0, orientation="horizontal", on_change=on_change, key='menu_5')
+                                menu_icon="cast", default_index=0, orientation="horizontal", key='menu_5')
 else:
     navbar = option_menu(None, ["Home", "Account", "Search", "Wallet", "Books", "Notifications"],
                               icons=['house', 'person-circle', "search", "wallet", "book", "bell"],
-                              menu_icon="cast", default_index=0, orientation="horizontal", on_change=on_change, key='menu_5')
+                              menu_icon="cast", default_index=0, orientation="horizontal", key='menu_5')
 
 col1, col2 = st.columns([2, 5])
 with col1:
@@ -177,7 +157,7 @@ with col2:
 st.components.v1.html("""
     <script>
     const matches = parent.document.querySelectorAll("[data-testid='stVerticalBlock']");
-    const match = matches[2];
+    const match = matches[1];
     match.style.background = "#D6CCC2";
     match.style.textAlign = 'center';
     match.style.borderRadius = '10px';
