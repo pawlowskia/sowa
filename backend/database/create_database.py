@@ -83,8 +83,11 @@ class Egzemplarz(Base):
     __tablename__ = 'Egzemplarz'
     Id = Column(Integer, primary_key=True)
     KsiazkaId = Column(Integer, ForeignKey('Ksiazka.Id'))
-    Status = Column(Enum('Dostepny', 'Wypozyczony', 'Zarezerwowany', 'Przygotowany', 'Niedostępny'))
+    Status = Column(Enum('Dostepny', 'Wypozyczony', 'Zarezerwowany', 'Przygotowany', 'Niedostepny'))
     Stan = Column(Integer)
+
+    def __str__(self):
+        return f"{self.Id} - {self.Status}, State: {self.Stan}/5"
 
 
 class Wypozyczenie(Base):

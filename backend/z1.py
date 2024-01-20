@@ -3,7 +3,7 @@ import time
 import streamlit as st
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from database.create_database import Ksiazka, Autor, Autorstwo, Base
+from database.create_database import Ksiazka, Autor, Autorstwo, Base, Egzemplarz
 from streamlit_modal import Modal
 
 # Connect to the database
@@ -15,6 +15,35 @@ session = Session()
 
 def get_all_books():
     return session.query(Ksiazka).all()
+
+
+def get_all_copies(book_id):
+    # return session.query(Ksiazka).all()
+    # only return books that have at least one copy with status 'Dostepny'
+    return session.query(Egzemplarz).join(Ksiazka).filter(Egzemplarz.KsiazkaId == book_id,
+                                                          Egzemplarz.Status != "Niedostepny").all()
+
+
+def delete_copy(copy_id):
+    copy_to_delete = session.query(Egzemplarz).filter(Egzemplarz.Id == copy_id).first()
+    copy_to_delete.Status = 'Niedostepny'
+    session.commit()
+
+
+def edit_book(book_id, title, isbn, authors, publisher, year):
+    book_to_update = session.query(Ksiazka).filter(Ksiazka.Id == book_id).first()
+    book_to_update.Tytul = title
+    if len(isbn) < 14:
+        book_to_update.ISBN = isbn
+    book_to_update.Wydawnictwo = publisher
+    book_to_update.RokWydania = year
+    book_authors = session.query(Autorstwo).filter(Autorstwo.KsiazkaId == book_id).all()
+    for book_author in book_authors:
+        session.delete(book_author)
+    for author in authors:
+        new_book_author = Autorstwo(AutorId=author.Id, KsiazkaId=book_id)
+        session.add(new_book_author)
+    session.commit()
 
 
 # Fetch all books
@@ -46,7 +75,6 @@ def main():
                                     <h3>{book.Tytul}</h3>
                                     <p><strong>ISBN:</strong> {book.ISBN}</p>
                                     <p><strong>Authors:</strong> {authors_string}</p>
-                                    <p><strong>Publisher:</strong> {book.Wydawnictwo}</p>
                                 </td>   
                             </tr>
                         </table>
@@ -73,16 +101,16 @@ def main():
         with col1:
             button_preview = st.button("Preview", key=f'centered-{book.Id}')
         with col2:
-            button_edit =  st.button("Edit", key=f'delete-{book.Id}')
+            button_edit = st.button("Edit", key=f'delete-{book.Id}')
         with col3:
-            button_delete = st.button("Delete", key=f'reserve-{book.Id}')
+            button_delete = st.button("Delete Copies", key=f'reserve-{book.Id}')
         modal_edit = Modal(
-            f'{book.Tytul}',
+            "",
             key=f'{book.Id}-modal_edit',
             max_width=900
         )
         modal_preview = Modal(
-            f'{book.Tytul}',
+            "",
             key=f'{book.Id}-modal_preview',
             max_width=900
         )
@@ -92,7 +120,7 @@ def main():
             modal_edit.open()
         confirm_edit_modal = Modal(
             "",
-            key=f'{book.Id}-demo-modal',
+            key=f'{book.Id}-confirm-edit-modal',
 
             # Optional
             padding=20,  # default value
@@ -100,7 +128,7 @@ def main():
         )
         confirm_delete_modal = Modal(
             "",
-            key=f'{book.Id}-demo-modal',
+            key=f'{book.Id}-demo-confirm-delete-modal',
 
             # Optional
             padding=20,  # default value
@@ -111,24 +139,27 @@ def main():
 
         if confirm_delete_modal.is_open():
             with confirm_delete_modal.container():
-                st.write(f'Are you sure you want delete "{book.Tytul}"')
-                col11,col12,col13 = st.columns([1,2,2])
-                with col11:
-                    no = st.button("Cancel")
-                with col13:
-                    yes = st.button("Confirm")
-                if no:
-                    confirm_delete_modal.close()
-
+                colum = st.columns([1, 8, 1])
+                with colum[1]:
+                    st.write(f"Choose copies of")
+                    st.write(f'"{book.Tytul}" to delete')
+                    copies = get_all_copies(book.Id)
+                    copies_to_delete = st.multiselect("", options=copies)
+                    confirm_delete_button = st.button("Confirm")
+                if confirm_delete_button:
+                    for copy in copies_to_delete:
+                        delete_copy(copy.Id)
+                    st.warning(f'{len(copies_to_delete)} copies status changed to inaccessible')
 
         if modal_preview.is_open():
             with modal_preview.container():
                 col1, col2, col3 = st.columns([1, 8, 1])
                 with col2:
+                    title_preview = st.text_input("Title:", value=book.Tytul, disabled=True)
                     isbn_preview = st.text_input("ISBN:", value=book.ISBN, disabled=True)
-                    author_preview = st.text_input("Author:",value=authors_string, disabled=True)
+                    author_preview = st.text_input("Author:", value=authors_string, disabled=True)
                     publisher_preview = st.text_input("Publisher:", value=book.Wydawnictwo, disabled=True)
-                    year_preview = st.text_input("Year:", value= book.RokWydania, disabled=True)
+                    year_preview = st.text_input("Year:", value=book.RokWydania, disabled=True)
 
                     return_button = st.button("Back")
 
@@ -139,11 +170,11 @@ def main():
             with modal_edit.container():
                 col1, col2, col3 = st.columns([1, 8, 1])
                 with col2:
-                    isbn_input = st.text_input("ISBN:", value=book.ISBN)
                     name_input = st.text_input("Title:", value=book.Tytul)
-                    author_input = st.multiselect("Author:", options=all_authors)
+                    isbn_input = st.text_input("ISBN:", value=book.ISBN)
+                    author_input = st.multiselect("Author:", options=all_authors, default=authors)
                     publisher_input = st.text_input("Publisher:", value=book.Wydawnictwo)
-                    year_input = st.text_input("Year:", value= book.RokWydania)
+                    year_input = st.text_input("Year:", value=book.RokWydania)
 
                     col4, col5, col6 = st.columns([1, 7, 1])
                     with col4:
@@ -161,7 +192,13 @@ def main():
                     if confirm_edit_modal.is_open():
                         with confirm_edit_modal.container():
                             st.write("Are you sure?")
-                            yes = st.button("Yes")
+                            col111, col112 = st.columns([1, 4])
+                            with col111:
+                                yes = st.button("Yes")
+                                if yes:
+                                    edit_book(book.Id, name_input, isbn_input, author_input, publisher_input,
+                                              year_input)
+                                    confirm_edit_modal.close()
 
     st.write("---")  # Separator between books
 
