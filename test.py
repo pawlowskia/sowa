@@ -9,6 +9,7 @@ modal = Modal(
     padding=20,  # default value
     max_width=300  # default value
 )
+
 modal1 = Modal(
     "Jakis tytaaaaaaul",
     key="modal_edit",
