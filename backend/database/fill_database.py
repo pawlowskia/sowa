@@ -111,7 +111,7 @@ def generate_random_autorstwo(g_ksiazki, g_autorzy):
 
 def generate_random_egzemplarz(g_ksiazki):
     return {
-        'Status': random.choice(['Dostepny', 'Wypozyczony', 'Zarezerwowany']),
+        'Status': random.choices(['Dostepny', 'Wypozyczony', 'Niedostępny'], [8, 4, 1], k=1)[0],
         'Stan': fake.random_int(min=1, max=5),
         'KsiazkaId': random.choice(g_ksiazki).Id
     }

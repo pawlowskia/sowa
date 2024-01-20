@@ -83,7 +83,7 @@ class Egzemplarz(Base):
     __tablename__ = 'Egzemplarz'
     Id = Column(Integer, primary_key=True)
     KsiazkaId = Column(Integer, ForeignKey('Ksiazka.Id'))
-    Status = Column(Enum('Dostepny', 'Wypozyczony', 'Zarezerwowany'))
+    Status = Column(Enum('Dostepny', 'Wypozyczony', 'Zarezerwowany', 'Przygotowany', 'Niedostępny'))
     Stan = Column(Integer)
 
 
