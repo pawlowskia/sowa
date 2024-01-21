@@ -44,6 +44,14 @@ class Uzytkownik(Base):
     Pesel = Column(String(11))
     Email = Column(String(255))
 
+# powiadomienia uzytkownika
+class Powiadomienie(Base):
+    __tablename__ = 'Powiadomienie'
+    Id = Column(Integer, primary_key=True)
+    KlientId = Column(Integer, ForeignKey('Klient.Id'), nullable=False)
+    Tresc = Column(String(255), nullable=False)
+    Status = Column(Boolean, nullable=False, default=False)
+
 
 class Klient(Base):
     __tablename__ = 'Klient'
@@ -170,5 +178,7 @@ Platnosc.metodaPlatnosci = relationship('MetodaPlatnosci', back_populates='platn
 MetodaPlatnosci.platnosci = relationship('Platnosc', back_populates='metodaPlatnosci')
 Adres.uzytkownicy = relationship('Uzytkownik', back_populates='adres')
 Uzytkownik.adres = relationship('Adres', back_populates='uzytkownicy')
+Powiadomienie.klient = relationship('Klient', back_populates='powiadomienia')
+Klient.powiadomienia = relationship('Powiadomienie', back_populates='klient')
 
 Base.metadata.create_all(engine)
