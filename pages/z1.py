@@ -44,6 +44,18 @@ def edit_book(book_id, title, authors, publisher, year):
     session.commit()
 
 
+
+
+def add_book(name, isbn, publisher, year, authors):
+    new_book = Ksiazka(Tytul=name, ISBN=isbn, Wydawnictwo=publisher, RokWydania=year)
+    session.add(new_book)
+    session.commit()
+    for author_of_new_book in authors:
+        session.add(Autorstwo(AutorId=author_of_new_book.Id, KsiazkaId=new_book.Id))
+    session.add(Egzemplarz(KsiazkaId=new_book.Id, Status='Dostepny', Stan=5))
+    session.commit()
+
+
 def get_books(statuses, author, title, year, publisher):
     print(statuses, author, title, year, publisher)
 
@@ -130,7 +142,11 @@ with col1:
             st.rerun()
 
 with col2:
+    page = st.session_state.page if 'page' in st.session_state else 0
+    active_books = st.session_state.books[page * books_per_page:(page + 1) * books_per_page]
+    all_authors = session.query(Autor).order_by(Autor.Nazwisko.asc())
     col111, col222 = st.columns([8, 1])
+
     modal_add = Modal(
         "",
         key='modal_add',
@@ -145,18 +161,18 @@ with col2:
 
     if modal_add.is_open():
         with modal_add.container():
-            coli1, coli2, coli3 = st.columns([1, 8, 1])
-            with coli2:
-                title_preview = st.text_input("Title:")
-                isbn_preview = st.text_input("ISBN:")
-                author_preview = st.text_input("Author:")
-                publisher_preview = st.text_input("Publisher:")
-                year_preview = st.text_input("Year:")
+            columns_add = st.columns([1, 4, 1, 4, 1])
+            with columns_add[1]:
+                title_add = st.text_input("Title:")
+                isbn_add = st.text_input("ISBN:")
+                year_add = st.text_input("Year:")
+            with columns_add[3]:
+                authors_add = st.multiselect("Author:", options=all_authors)
+                publisher_add = st.text_input("Publisher:")
                 add_button = st.button("ADD")
-
-    page = st.session_state.page if 'page' in st.session_state else 0
-    active_books = st.session_state.books[page * books_per_page:(page + 1) * books_per_page]
-    all_authors = session.query(Autor)
+                if add_button:
+                    add_book(title_add, isbn_add, publisher_add, year_add, authors_add)
+                    modal_add.close()
 
     for book in active_books:
         authors = session.query(Autor).join(Autorstwo).filter(Autorstwo.KsiazkaId == book.Id).all()
