@@ -100,11 +100,11 @@ navbar = None
 if st.session_state.is_worker:
     navbar = option_menu(None, ["Home", "Account", "Search", "Reports", "Books", "Notifications"],
                          icons=['house', 'person-circle', "search", "file-earmark-bar-graph", "book", "bell"],
-                         menu_icon="cast", default_index=0, orientation="horizontal", on_change=on_change, key='menu_5')
+                         menu_icon="cast", default_index=4, orientation="horizontal", on_change=on_change, key='menu_5')
 else:
     navbar = option_menu(None, ["Home", "Account", "Search", "Wallet", "Books", "Notifications"],
                          icons=['house', 'person-circle', "search", "wallet", "book", "bell"],
-                         menu_icon="cast", default_index=0, orientation="horizontal", on_change=on_change, key='menu_5')
+                         menu_icon="cast", default_index=4, orientation="horizontal", on_change=on_change, key='menu_5')
 
 col1, col2 = st.columns([2, 5])
 with col1:

@@ -250,7 +250,7 @@ for zwrocony_egzemplarz in zwrocone_egzemplarze_set:
 session.add_all(zwrocone_egzemplarze)
 
 powiadomienia = []
-for _ in range(1000):
+for _ in range(200000):
     powiadomienia.append(Powiadomienie(**generate_random_powiadomienie(klienci)))
 
 session.add_all(powiadomienia)

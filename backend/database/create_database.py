@@ -182,5 +182,3 @@ Powiadomienie.klient = relationship('Klient', back_populates='powiadomienia')
 Klient.powiadomienia = relationship('Powiadomienie', back_populates='klient')
 
 Base.metadata.create_all(engine)
-
-from fill_database import *
