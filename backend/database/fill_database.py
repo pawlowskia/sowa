@@ -4,7 +4,8 @@ from faker import Faker
 import random
 
 from create_database import Adres, Pracownik, Stanowisko, Uzytkownik, Klient, Autor, Zwrot, Ksiazka, Egzemplarz, \
-    Wypozyczenie, MetodaPlatnosci, Platnosc, Autorstwo, ZwracanyEgzemplarz, ZamowionyEgzemplarz, PlatnoscKlient
+    Wypozyczenie, MetodaPlatnosci, Platnosc, Autorstwo, ZwracanyEgzemplarz, ZamowionyEgzemplarz, PlatnoscKlient, \
+    Powiadomienie
 
 Base = declarative_base()
 fake = Faker()
@@ -67,12 +68,14 @@ def generate_random_platnosc_klient(g_klienci, g_platnosc):
         'PlatnoscId': g_platnosc.Id
     }
 
-def generate_random_powiadomienie(g_klient):
+
+def generate_random_powiadomienie(g_klienci):
     return {
-        'KlientId': g_klient.Id,
+        'KlientId': random.choice(g_klienci).Id,
         'Tresc': fake.text(max_nb_chars=200),
         'Status': random.choice([True, False])
     }
+
 
 def generate_random_wypozyczenie(g_klienci, g_pracownicy):
     return {
@@ -248,7 +251,7 @@ session.add_all(zwrocone_egzemplarze)
 
 powiadomienia = []
 for _ in range(1000):
-    powiadomienia.append(generate_random_powiadomienie(random.choice(klienci)))
+    powiadomienia.append(Powiadomienie(**generate_random_powiadomienie(klienci)))
 
 session.add_all(powiadomienia)
 

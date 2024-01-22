@@ -44,13 +44,13 @@ class Uzytkownik(Base):
     Pesel = Column(String(11))
     Email = Column(String(255))
 
-# powiadomienia uzytkownika
+
 class Powiadomienie(Base):
     __tablename__ = 'Powiadomienie'
     Id = Column(Integer, primary_key=True)
     KlientId = Column(Integer, ForeignKey('Klient.Id'), nullable=False)
     Tresc = Column(String(255), nullable=False)
-    Status = Column(Boolean, nullable=False, default=False)
+    Status = Column(Boolean, nullable=False)
 
 
 class Klient(Base):
@@ -182,3 +182,5 @@ Powiadomienie.klient = relationship('Klient', back_populates='powiadomienia')
 Klient.powiadomienia = relationship('Powiadomienie', back_populates='klient')
 
 Base.metadata.create_all(engine)
+
+from fill_database import *
