@@ -7,7 +7,7 @@ driver = webdriver.Firefox()
 
 try:
     # Open the Streamlit app
-    driver.get("http://localhost:8501/b1")  # Replace with the actual URL of your Streamlit app
+    driver.get("http://localhost:8502/b1")  # Replace with the actual URL of your Streamlit app
     driver.maximize_window() # For maximizing window
 
     time.sleep(3)
