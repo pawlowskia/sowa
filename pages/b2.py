@@ -26,7 +26,7 @@ def generate_random_graph():
     # x = np.arange(0, 10, 1)
     # change x to display dates
     x = np.arange(2017, 2024, 1)
-    y = (np.sin(x) + 1) * 2000
+    y = (np.sin(x) + 300) * 200
     plt.plot(x, y)
     return plt
 
