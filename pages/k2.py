@@ -20,7 +20,7 @@ if 'is_worker' not in st.session_state:
 if 'powiadomienia' not in st.session_state:
     st.session_state.powiadomienia = []
 if 'user_id' not in st.session_state:
-    st.session_state.user_id = 4
+    st.session_state.user_id = 18001
 
 def get_powiadomienia():
     st.session_state.powiadomienia = session.query(Powiadomienie).filter(Powiadomienie.KlientId == st.session_state.user_id).filter(Powiadomienie.Status == False).all()
@@ -56,6 +56,7 @@ for powiadomienie in active_powiadomienia:
                 """,
             unsafe_allow_html=True
         )
+    st.write("---")
 
 
 prev_page_col, separator, next_page_col = st.columns([1, 4, 1])
