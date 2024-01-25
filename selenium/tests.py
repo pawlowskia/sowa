@@ -8,12 +8,12 @@ from z1 import main as z1_main
 def main():
     port = "8503"
     try:
-        # b1_main(port)
-        # b2_main(port)
-        # b3_main(port)
-        # k1_main(port)
+        b1_main(port)
+        b2_main(port)
+        b3_main(port)
+        k1_main(port)
         k2_main(port)
-        # z1_main(port)
+        z1_main(port)
     except Exception as e:
         print(e)
         exit(1)
